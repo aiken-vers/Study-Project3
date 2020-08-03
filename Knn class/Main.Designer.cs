@@ -35,8 +35,6 @@
             this.dots_list = new System.Windows.Forms.ComboBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.logBox = new System.Windows.Forms.RichTextBox();
-            this.button4 = new System.Windows.Forms.Button();
             this.neighbours = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.def_knn = new System.Windows.Forms.RadioButton();
@@ -55,9 +53,20 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numElements = new System.Windows.Forms.NumericUpDown();
             this.button9 = new System.Windows.Forms.Button();
+            this.Metrics = new System.Windows.Forms.ComboBox();
+            this.button13 = new System.Windows.Forms.Button();
+            this.Kls_Metrics = new System.Windows.Forms.ComboBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtDot1 = new System.Windows.Forms.TextBox();
+            this.txtDot2 = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numKlasters)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numElements)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -130,9 +139,9 @@
             this.button2.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(584, 71);
+            this.button2.Location = new System.Drawing.Point(584, 40);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(98, 30);
+            this.button2.Size = new System.Drawing.Size(104, 30);
             this.button2.TabIndex = 11;
             this.button2.Text = "Сортировка";
             this.button2.UseVisualStyleBackColor = false;
@@ -151,26 +160,6 @@
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
-            // logBox
-            // 
-            this.logBox.BackColor = System.Drawing.Color.Black;
-            this.logBox.ForeColor = System.Drawing.Color.White;
-            this.logBox.Location = new System.Drawing.Point(318, 249);
-            this.logBox.Name = "logBox";
-            this.logBox.Size = new System.Drawing.Size(319, 90);
-            this.logBox.TabIndex = 14;
-            this.logBox.Text = "";
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(318, 346);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 15;
-            this.button4.Text = "append";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.Button4_Click);
-            // 
             // neighbours
             // 
             this.neighbours.Location = new System.Drawing.Point(487, 118);
@@ -183,7 +172,7 @@
             this.button6.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button6.Location = new System.Drawing.Point(584, 36);
+            this.button6.Location = new System.Drawing.Point(584, 76);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(81, 28);
             this.button6.TabIndex = 18;
@@ -210,7 +199,7 @@
             this.w_knn.AutoSize = true;
             this.w_knn.BackColor = System.Drawing.Color.Transparent;
             this.w_knn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.w_knn.Location = new System.Drawing.Point(375, 152);
+            this.w_knn.Location = new System.Drawing.Point(370, 152);
             this.w_knn.Name = "w_knn";
             this.w_knn.Size = new System.Drawing.Size(130, 17);
             this.w_knn.TabIndex = 20;
@@ -222,7 +211,7 @@
             this.c_knn.AutoSize = true;
             this.c_knn.BackColor = System.Drawing.Color.Transparent;
             this.c_knn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.c_knn.Location = new System.Drawing.Point(511, 152);
+            this.c_knn.Location = new System.Drawing.Point(501, 152);
             this.c_knn.Name = "c_knn";
             this.c_knn.Size = new System.Drawing.Size(126, 17);
             this.c_knn.TabIndex = 21;
@@ -233,6 +222,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.Location = new System.Drawing.Point(399, 124);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(87, 13);
@@ -297,7 +287,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(399, 216);
+            this.label2.Location = new System.Drawing.Point(318, 233);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 13);
             this.label2.TabIndex = 29;
@@ -305,9 +295,9 @@
             // 
             // klasters
             // 
-            this.klasters.Location = new System.Drawing.Point(503, 210);
+            this.klasters.Location = new System.Drawing.Point(417, 227);
             this.klasters.Name = "klasters";
-            this.klasters.Size = new System.Drawing.Size(65, 20);
+            this.klasters.Size = new System.Drawing.Size(108, 20);
             this.klasters.TabIndex = 28;
             // 
             // button8
@@ -315,7 +305,7 @@
             this.button8.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button8.Location = new System.Drawing.Point(318, 203);
+            this.button8.Location = new System.Drawing.Point(321, 259);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 27);
             this.button8.TabIndex = 27;
@@ -386,7 +376,7 @@
             this.button9.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button9.Location = new System.Drawing.Point(399, 342);
+            this.button9.Location = new System.Drawing.Point(402, 259);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(123, 28);
             this.button9.TabIndex = 34;
@@ -394,12 +384,135 @@
             this.button9.UseVisualStyleBackColor = false;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
+            // Metrics
+            // 
+            this.Metrics.BackColor = System.Drawing.Color.Black;
+            this.Metrics.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Metrics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Metrics.ForeColor = System.Drawing.Color.White;
+            this.Metrics.FormattingEnabled = true;
+            this.Metrics.Items.AddRange(new object[] {
+            "Евклидово расстояние",
+            "Квадрат Евклидова расстояния",
+            "Манхэттенское расстояние",
+            "Расстояние Чебышева",
+            "Расстояние Хэмминга",
+            "Расстояние Левинштейна"});
+            this.Metrics.Location = new System.Drawing.Point(318, 198);
+            this.Metrics.Name = "Metrics";
+            this.Metrics.Size = new System.Drawing.Size(230, 23);
+            this.Metrics.TabIndex = 41;
+            this.Metrics.Text = "Метрика";
+            this.Metrics.SelectedIndexChanged += new System.EventHandler(this.Metrics_SelectedIndexChanged);
+            // 
+            // button13
+            // 
+            this.button13.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button13.Location = new System.Drawing.Point(321, 293);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(204, 45);
+            this.button13.TabIndex = 46;
+            this.button13.Text = "Иерархическая кластеризация";
+            this.button13.UseVisualStyleBackColor = false;
+            this.button13.Click += new System.EventHandler(this.Button13_Click);
+            // 
+            // Kls_Metrics
+            // 
+            this.Kls_Metrics.BackColor = System.Drawing.Color.Black;
+            this.Kls_Metrics.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Kls_Metrics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Kls_Metrics.ForeColor = System.Drawing.Color.White;
+            this.Kls_Metrics.FormattingEnabled = true;
+            this.Kls_Metrics.Items.AddRange(new object[] {
+            "Метод ближайшего соседа",
+            "Метод дальнего соседа",
+            "UPGMA",
+            "WPGMA"});
+            this.Kls_Metrics.Location = new System.Drawing.Point(564, 198);
+            this.Kls_Metrics.Name = "Kls_Metrics";
+            this.Kls_Metrics.Size = new System.Drawing.Size(230, 23);
+            this.Kls_Metrics.TabIndex = 47;
+            this.Kls_Metrics.Text = "Критерий связи";
+            this.Kls_Metrics.SelectedIndexChanged += new System.EventHandler(this.Kls_Metrics_SelectedIndexChanged);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.groupBox2);
+            this.groupBox1.Location = new System.Drawing.Point(546, 227);
+            this.groupBox1.MinimumSize = new System.Drawing.Size(0, 2);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(245, 117);
+            this.groupBox1.TabIndex = 48;
+            this.groupBox1.TabStop = false;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox2.Controls.Add(this.button4);
+            this.groupBox2.Controls.Add(this.txtDot2);
+            this.groupBox2.Controls.Add(this.txtDot1);
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox2.Location = new System.Drawing.Point(0, 2);
+            this.groupBox2.MinimumSize = new System.Drawing.Size(0, 2);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(245, 113);
+            this.groupBox2.TabIndex = 49;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Работа со строками";
+            // 
+            // txtDot1
+            // 
+            this.txtDot1.Location = new System.Drawing.Point(7, 30);
+            this.txtDot1.Name = "txtDot1";
+            this.txtDot1.Size = new System.Drawing.Size(232, 21);
+            this.txtDot1.TabIndex = 0;
+            // 
+            // txtDot2
+            // 
+            this.txtDot2.Location = new System.Drawing.Point(7, 56);
+            this.txtDot2.Name = "txtDot2";
+            this.txtDot2.Size = new System.Drawing.Size(232, 21);
+            this.txtDot2.TabIndex = 1;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button4.Location = new System.Drawing.Point(48, 82);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(149, 27);
+            this.button4.TabIndex = 49;
+            this.button4.Text = "Найти расстояние";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.Button4_Click_1);
+            // 
+            // button10
+            // 
+            this.button10.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button10.Location = new System.Drawing.Point(694, 40);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 30);
+            this.button10.TabIndex = 50;
+            this.button10.Text = "1d=1k";
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.Button10_Click_1);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(700, 375);
+            this.ClientSize = new System.Drawing.Size(803, 353);
+            this.Controls.Add(this.button10);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.Kls_Metrics);
+            this.Controls.Add(this.button13);
+            this.Controls.Add(this.Metrics);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.numElements);
@@ -418,8 +531,6 @@
             this.Controls.Add(this.def_knn);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.neighbours);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.logBox);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.dots_list);
@@ -430,10 +541,13 @@
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = " ";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numKlasters)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numElements)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -448,8 +562,6 @@
         private System.Windows.Forms.ComboBox dots_list;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.RichTextBox logBox;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox neighbours;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.RadioButton def_knn;
@@ -468,6 +580,15 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numElements;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.ComboBox Metrics;
+        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.ComboBox Kls_Metrics;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox txtDot2;
+        private System.Windows.Forms.TextBox txtDot1;
+        private System.Windows.Forms.Button button10;
     }
 }
 
