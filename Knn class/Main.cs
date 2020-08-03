@@ -490,14 +490,14 @@ namespace Knn_class
 
         private void Button13_Click(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 Klass.CopyDots(Klass.Kls_to_List(gls), old_Dots);
                 Klass.lab3(gls, metric, Convert.ToInt32(klasters.Text), kls_metric);
                 Check_colors();
                 RefreshAll();
-            //}
-            //catch { }
+            }
+            catch { }
         }
 
         private void Button10_Click_1(object sender, EventArgs e)
@@ -732,6 +732,6 @@ namespace Knn_class
                 } 
             }
             return chart_step[min_index];
-        }
+        }       
     }
 }

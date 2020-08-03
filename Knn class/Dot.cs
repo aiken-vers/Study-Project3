@@ -67,7 +67,7 @@ namespace Knn_class
             {
                 for (int i = 0; i < n; i++)
                 {
-                    sb.Append(this.prms[i].ToString() + ';');
+                    sb.Append(Math.Round(this.prms[i], 2).ToString() + ';');
                 }
                 if (sb.ToString().EndsWith(";"))
                     sb = sb.Remove(sb.Length - 1, 1);

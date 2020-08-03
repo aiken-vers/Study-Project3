@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.classes = new System.Windows.Forms.ComboBox();
             this.point_draw = new System.Windows.Forms.CheckBox();
@@ -77,6 +77,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.Cstep = new System.Windows.Forms.TextBox();
             this.chart_auto = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numKlasters)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numElements)).BeginInit();
@@ -171,15 +172,15 @@
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button3.Location = new System.Drawing.Point(318, 111);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 27);
+            this.button3.Size = new System.Drawing.Size(137, 27);
             this.button3.TabIndex = 13;
-            this.button3.Text = "Knn";
+            this.button3.Text = "Кластеризация";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // neighbours
             // 
-            this.neighbours.Location = new System.Drawing.Point(487, 118);
+            this.neighbours.Location = new System.Drawing.Point(549, 119);
             this.neighbours.Name = "neighbours";
             this.neighbours.Size = new System.Drawing.Size(81, 20);
             this.neighbours.TabIndex = 16;
@@ -240,7 +241,7 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(399, 124);
+            this.label1.Location = new System.Drawing.Point(461, 125);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(87, 13);
             this.label1.TabIndex = 22;
@@ -252,7 +253,7 @@
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button5.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.button5.Location = new System.Drawing.Point(584, 110);
+            this.button5.Location = new System.Drawing.Point(671, 77);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 27);
             this.button5.TabIndex = 23;
@@ -522,22 +523,22 @@
             // chad
             // 
             this.chad.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.Name = "ChartArea1";
-            this.chad.ChartAreas.Add(chartArea1);
-            legend1.Enabled = false;
-            legend1.Name = "Legend1";
-            this.chad.Legends.Add(legend1);
+            chartArea3.Name = "ChartArea1";
+            this.chad.ChartAreas.Add(chartArea3);
+            legend3.Enabled = false;
+            legend3.Name = "Legend1";
+            this.chad.Legends.Add(legend3);
             this.chad.Location = new System.Drawing.Point(12, 362);
             this.chad.Name = "chad";
-            series1.BorderWidth = 3;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Color = System.Drawing.Color.Red;
-            series1.Legend = "Legend1";
-            series1.MarkerBorderWidth = 5;
-            series1.Name = "График расстояний между точками";
-            series1.YValuesPerPoint = 10;
-            this.chad.Series.Add(series1);
+            series3.BorderWidth = 3;
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Color = System.Drawing.Color.Red;
+            series3.Legend = "Legend1";
+            series3.MarkerBorderWidth = 5;
+            series3.Name = "График расстояний между точками";
+            series3.YValuesPerPoint = 10;
+            this.chad.Series.Add(series3);
             this.chad.Size = new System.Drawing.Size(502, 226);
             this.chad.TabIndex = 51;
             this.chad.Text = "chad";
@@ -675,12 +676,23 @@
             this.chart_auto.Text = "авто";
             this.chart_auto.UseVisualStyleBackColor = false;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(105, 362);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(354, 15);
+            this.label7.TabIndex = 63;
+            this.label7.Text = "Гистограмма распределения попарных расстояний";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(803, 600);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.chart_auto);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.Cstep);
@@ -787,6 +799,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox Cstep;
         private System.Windows.Forms.CheckBox chart_auto;
+        private System.Windows.Forms.Label label7;
     }
 }
 
