@@ -382,7 +382,7 @@ namespace Knn_class
                 return s;
             }
         }
-    }
+    }    
     /////////////////////////////////////////////////////////////////////////////////////////////
     /// <summary>
     /// Класс для классов/кластеров элементов
@@ -510,6 +510,11 @@ namespace Knn_class
             kls.Clear();
             kls.AddRange(full_kls);                    
         }
+        public static void Clear(List<Klass> kls)
+        {
+            foreach (Klass k in kls)
+                k.Dots.Clear();
+        }
         /// <summary>
         /// Вычисляет среднее значение вероятности для списка объектов
         /// </summary>
@@ -624,7 +629,7 @@ namespace Knn_class
         {
             rnd = new Random();
             double r;
-            int number = 1;
+            int number = Dots.Count+1;
             string name;
             double radius = Math.Log(kelements, Math.Sqrt(Math.Sqrt(max_prm))) / 10; // максимальное расстояние, на котором могут находиться элементы одного кластера
             List<Dot> temp = new List<Dot>();
@@ -670,8 +675,9 @@ namespace Knn_class
                 }
 
                 name = "P" + number; number++;
-                Dot rand = new Dot(center, name); // создание первого элемента с параметрами центра кластера
-                rand.class_name = class_name;
+                Dot rand = new Dot(center, class_name); // создание первого элемента с параметрами центра кластера
+                rand.name = name;
+                //rand.class_name = class_name;
                 temp.Add(rand);
                 for (int i = 1; i < kelements; i++)
                 {
@@ -688,8 +694,9 @@ namespace Knn_class
                         p_prms.Add(prm);
                     }
                     name = "P" + number; number++;
-                    Dot rad = new Dot(p_prms, name);
-                    rad.class_name = class_name;
+                    Dot rad = new Dot(p_prms, class_name);
+                    rad.name = name;
+                    //rad.class_name = class_name;
                     temp.Add(rad);
                 }
                 Dots.AddRange(temp);
@@ -1131,6 +1138,68 @@ namespace Knn_class
             kls.AddRange(klasses.ToList()); // добавляем полученные кластеры
         }
         /// <summary>
+        /// Графовая кластеризация
+        /// </summary>
+        /// <param name="kls">Список классов</param>
+        /// <param name="bros">Список рёбер</param>
+        public static void lab4(List<Klass> kls, List<Rebro> bros)
+        {
+            List<Dot> free_dots = new List<Dot>();
+            List<Klass> klasters = new List<Klass>();            
+            Random rnd = new Random();
+            free_dots.AddRange(Kls_to_List(kls));
+            Klass.Clear(kls);
+            
+            while (free_dots.Any())
+            {
+                List<Dot> klaster = new List<Dot>();
+                List<Dot> tail = new List<Dot>();
+                // выбираем случайную точку - голову
+                Dot head = free_dots[rnd.Next(0, free_dots.Count - 1)];
+                tail.Add(head);
+                // пока у головы есть хвосты
+                while (tail.Any())
+                {
+                    Dot dot = tail[0];
+                    // удаляем текущую вершину из списка бесклассовых
+                    free_dots.Remove(free_dots.Where(f=>f.name==dot.name).ToList()[0]);
+                    // дабавляем её в текущий кластер
+                    klaster.Add(dot);
+                    //free_dots.Remove(tail[0]);
+                    //klaster.Add(tail[0]);
+                    foreach (Rebro bro in bros)
+                    {
+                        if (Rebro.has_any(bro, dot))
+                        {
+                            //&& !tail.Where(d => d.name == bro.from.name).Any()
+                            //если класс вершиныещё не определён
+                            if (free_dots.Where(d => d.name == bro.from.name).Any())
+                            {
+                                // если вершины ещё нет в списке хвостов
+                                if (!tail.Where(d => d.name == bro.from.name).Any())
+                                    tail.Add(bro.from);
+                            }
+                            else if (free_dots.Where(d => d.name == bro.to.name).Any())
+                            {
+                                if (!tail.Where(d => d.name == bro.to.name).Any())
+                                    tail.Add(bro.to);
+                            }  
+                        }
+                    }
+                    tail.Remove(dot);
+                    //tail.RemoveAt(0);
+                }
+                // генерируем новый класс
+                string kls_name = "klaster" + (kls.Count-1);
+                Klass k = new Klass(kls_name, "DimGray");
+                foreach (Dot d in klaster)
+                    d.class_name = k.name;
+                // записываем в него полученный кластер
+                k.Dots.AddRange(klaster.ToList());
+                kls.Add(k);
+            }
+        }
+        /// <summary>
         /// Критерий связности между двумя кластерами
         /// </summary>
         public abstract class Metric
@@ -1308,5 +1377,254 @@ namespace Knn_class
                 return result;
             }
         }        
-    }    
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    public class Rebro
+    {
+        public Dot from;
+        public Dot to;
+        public string name;
+        public double mean;
+        public Rebro(Dot From, Dot To, double Mean)
+        {
+            from = From;
+            to = To;
+            mean = Mean;
+            name = from.name + to.name;
+        }
+        public override string ToString()
+        {
+            return this.name + " (" + Math.Round(this.mean, 2) + ")";
+        }
+        /// <summary>
+        /// Построение полносвязного графа
+        /// </summary>
+        /// <param name="Dots">Список вершин</param>
+        /// <param name="bros_main">Список для хранения рёбер</param>
+        /// <param name="metric">метрика расстояния между вершинами</param>
+        public static void Build_full(List<Dot> Dots, List<Rebro> bros_main, Dot.Metric metric)
+        {
+            bros_main.Clear();
+            List<Rebro> bros = new List<Rebro>();
+            // создание полносвязного графа
+            foreach (Dot from in Dots)
+            {
+                foreach (Dot to in Dots)
+                {
+                    double mean = metric.Distance(from, to);
+                    if (mean > 0 && !are_bros(bros, from, to))
+                    {
+                        Rebro new_bro = new Rebro(from, to, mean);
+                        bros.Add(new_bro);
+                    }
+                }
+            }
+            bros_main.AddRange(bros.ToList());
+        }
+        /// <summary>
+        /// Построение графа с помощью выделения связных компонент
+        /// </summary>
+        /// <param name="Dots">Список вершин</param>
+        /// <param name="bros_main">Список для хранения рёбер</param>
+        /// <param name="metric">метрика расстояния между вершинами</param>
+        /// <param name="R">Максимальное рпсстояние между вершинами в графе</param>
+        public static void Build_from_R(List<Dot> Dots, List<Rebro> bros_main, Dot.Metric metric, double R=0)
+        {
+            bros_main.Clear();
+            List<Rebro> bros = new List<Rebro>();
+            // создание полносвязного графа
+            foreach (Dot from in Dots)
+            {
+                foreach (Dot to in Dots)
+                {
+                    double mean = metric.Distance(from, to);
+                    if (mean > 0 && !are_bros(bros, from, to)&&mean<R)
+                    {
+                        Rebro new_bro = new Rebro(from, to, mean);
+                        bros.Add(new_bro);
+                    }
+                }
+            }
+            bros_main.AddRange(bros.ToList());
+        }
+        /// <summary>
+        /// Построение мин.остовного дерева с помощью алгоритма Прима
+        /// </summary>
+        /// <param name="Dots">Список вершин</param>
+        /// <param name="bros_main">Список для хранения рёбер</param>
+        /// <param name="metric">метрика расстояния между вершинами</param>
+        /// <param name="last_stand">Количество получаемых графов</param>
+        public static void Prim(List<Dot> Dots, List<Rebro> bros_main, Dot.Metric metric, int last_stand=1)
+        {            
+            bros_main.Clear();
+            List<Rebro> bros = new List<Rebro>();
+            // создание полносвязного графа
+            foreach (Dot from in Dots)
+            {
+                foreach (Dot to in Dots)
+                {
+                    double mean = metric.Distance(from, to);
+                    if (mean > 0&&!are_bros(bros, from, to))
+                    {
+                        Rebro new_bro = new Rebro(from, to, mean);
+                        bros.Add(new_bro);
+                    }
+                }
+            }
+            bros = bros.OrderBy(d => d.mean).ToList();
+
+            List<Rebro> bromin = new List<Rebro>(); // список рёбер минимального остовного дерева
+            // сохраняем в каждую вершину сумму весов её ребёр, чтобы найти вершину с минимальным приоритетом
+            foreach(Dot d in Dots)
+            {
+                d.mean = 0;
+                foreach (Rebro b in bros)
+                    if (has_any(b, d))
+                        d.mean += b.mean;
+            }
+            List<Dot> Bdots = new List<Dot>();
+            Bdots.AddRange(Dots.OrderBy(d => d.mean).ToList());   // сортировка списка вершин по приоритету
+            foreach (Rebro b in bros)
+            {
+                if (has_any(b, Bdots[0]))
+                {
+                    if(!has_from(b, Bdots[0]))
+                    {
+                        b.reverse();
+                    }
+                    bromin.Add(b);                    
+                }
+            }
+            // на первом шаге алгоритма записываем в вершины расстояние до вершины с наименьшим приоритетом
+            foreach (Dot d in Bdots)
+                d.mean = metric.Distance(d, Bdots[0]);
+            Bdots.RemoveAt(0);
+            int count = Bdots.Count;
+            int steps = 0;
+            // цикл построения мин. остовного дерева
+            while(steps<count)
+            {
+                Bdots = Bdots.OrderBy(d => d.mean == 0).ThenBy(d => d.mean).ToList(); // сортировка списка вершин по приоритету
+                Dot min = Bdots[0];
+                Bdots.RemoveAt(0);
+                min.mean = 0;
+                List<Rebro> cutbros = new List<Rebro>();
+                foreach (Rebro b in bros)
+                {
+                    if (has_any(b, min))
+                    {
+                        if (!has_from(b, min))
+                        {
+                            b.reverse();
+                        }
+                        foreach (Dot d in Bdots)
+                            if (b.to == d)
+                                cutbros.Add(b);
+                    }
+                }
+                // список пар ребёр, которые подлежат замене
+                List<string[]> replace = new List<string[]>();
+                foreach (Rebro cut in cutbros)
+                {
+                    foreach (Rebro bro in bromin)
+                    {
+                        if (cut.to == bro.to)
+                        {
+                            if (cut.mean < bro.mean)
+                            {
+                                replace.Add(new string[] { bro.name, cut.name });
+                                foreach (Dot d in Bdots)
+                                    if (d == cut.to)
+                                        d.mean = cut.mean;
+                            }
+                        }
+                    }
+                }                
+                foreach (string[] pair in replace)
+                {
+                    int del=9999, add=9999;
+                    foreach (Rebro bro in bromin)
+                        if (bro.name == pair[0])
+                            del = bromin.IndexOf(bro);
+                    foreach (Rebro cut in cutbros)
+                        if (cut.name == pair[1])
+                            add = cutbros.IndexOf(cut);
+
+                    bromin.RemoveAt(del);
+                    bromin.Add(cutbros[add]);
+                }
+                steps++;
+            } 
+            //bros_main.AddRange(bromin.ToList());
+
+            // удаление ребёр с наибольшим весом
+            List<Rebro> lastbros = bromin.OrderByDescending(b => b.mean).ToList();
+            for (int i = 1; i < last_stand; i++)
+                lastbros.RemoveAt(0);
+
+            bros_main.AddRange(lastbros.ToList());
+
+        }      
+        /// <summary>
+        /// Проверяет, относится ли данная точка к вершине ребра from
+        /// </summary>
+        /// <param name="bro"></param>
+        /// <param name="dot"></param>
+        /// <returns></returns>
+        static bool has_from(Rebro bro, Dot dot)
+        {
+                if (bro.from == dot)
+                    return true;
+            return false;
+        }
+        /// <summary>
+        /// Проверяет, относится ли данная точка к вершине ребра to
+        /// </summary>
+        /// <param name="bro"></param>
+        /// <param name="dot"></param>
+        /// <returns></returns>
+        static bool has_to(Rebro bro, Dot dot)
+        {
+                if (bro.to == dot)
+                    return true;
+            return false;
+        }
+        /// <summary>
+        /// Меняет вершины from и to местами
+        /// </summary>
+        void reverse()
+        {
+            Dot temp = this.from;
+            this.from = this.to;
+            this.to = temp;
+            name = from.name + to.name;
+        }
+        /// <summary>
+        /// Проверяет, относится ли данная точка к вершинам ребра
+        /// </summary>
+        /// <param name="bro"></param>
+        /// <param name="dot"></param>
+        /// <returns></returns>
+        public static bool has_any(Rebro bro, Dot dot)
+        {
+                if (bro.to.name == dot.name || bro.from.name == dot.name)
+                    return true;
+            return false;
+        }
+        /// <summary>
+        /// Поверяет, существует ли ребро между двумя вершинами
+        /// </summary>
+        /// <param name="bros"></param>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <returns></returns>
+        static bool are_bros(List<Rebro> bros, Dot d1, Dot d2)
+        {
+            if (bros.Where(b => b.from.name == d1.name && b.to.name == d2.name || b.from.name == d2.name && b.to.name == d1.name).ToList().Any())
+                return true;
+            else
+                return false;            
+        }
+    }
+    
 }

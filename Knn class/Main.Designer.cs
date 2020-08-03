@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.classes = new System.Windows.Forms.ComboBox();
             this.point_draw = new System.Windows.Forms.CheckBox();
@@ -58,15 +61,28 @@
             this.Kls_Metrics = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtDot1 = new System.Windows.Forms.TextBox();
-            this.txtDot2 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
+            this.txtDot2 = new System.Windows.Forms.TextBox();
+            this.txtDot1 = new System.Windows.Forms.TextBox();
             this.button10 = new System.Windows.Forms.Button();
+            this.chad = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.ribs = new System.Windows.Forms.CheckBox();
+            this.button11 = new System.Windows.Forms.Button();
+            this.graph_method = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.Rbox = new System.Windows.Forms.TextBox();
+            this.button12 = new System.Windows.Forms.Button();
+            this.r_auto = new System.Windows.Forms.CheckBox();
+            this.button14 = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.Cstep = new System.Windows.Forms.TextBox();
+            this.chart_auto = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numKlasters)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numElements)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chad)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -98,7 +114,7 @@
             // 
             this.point_draw.Appearance = System.Windows.Forms.Appearance.Button;
             this.point_draw.AutoSize = true;
-            this.point_draw.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.point_draw.BackColor = System.Drawing.Color.RosyBrown;
             this.point_draw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.point_draw.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.point_draw.Location = new System.Drawing.Point(12, 10);
@@ -107,6 +123,7 @@
             this.point_draw.TabIndex = 3;
             this.point_draw.Text = "Point&&Click";
             this.point_draw.UseVisualStyleBackColor = false;
+            this.point_draw.CheckedChanged += new System.EventHandler(this.Point_draw_CheckedChanged);
             // 
             // button1
             // 
@@ -239,7 +256,7 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 27);
             this.button5.TabIndex = 23;
-            this.button5.Text = "Revert";
+            this.button5.Text = "Отмена";
             this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
@@ -247,7 +264,7 @@
             // 
             this.centers.Appearance = System.Windows.Forms.Appearance.Button;
             this.centers.AutoSize = true;
-            this.centers.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.centers.BackColor = System.Drawing.Color.RosyBrown;
             this.centers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.centers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.centers.Location = new System.Drawing.Point(108, 10);
@@ -462,20 +479,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Работа со строками";
             // 
-            // txtDot1
-            // 
-            this.txtDot1.Location = new System.Drawing.Point(7, 30);
-            this.txtDot1.Name = "txtDot1";
-            this.txtDot1.Size = new System.Drawing.Size(232, 21);
-            this.txtDot1.TabIndex = 0;
-            // 
-            // txtDot2
-            // 
-            this.txtDot2.Location = new System.Drawing.Point(7, 56);
-            this.txtDot2.Name = "txtDot2";
-            this.txtDot2.Size = new System.Drawing.Size(232, 21);
-            this.txtDot2.TabIndex = 1;
-            // 
             // button4
             // 
             this.button4.BackColor = System.Drawing.SystemColors.ActiveCaption;
@@ -488,6 +491,20 @@
             this.button4.Text = "Найти расстояние";
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.Button4_Click_1);
+            // 
+            // txtDot2
+            // 
+            this.txtDot2.Location = new System.Drawing.Point(7, 56);
+            this.txtDot2.Name = "txtDot2";
+            this.txtDot2.Size = new System.Drawing.Size(232, 21);
+            this.txtDot2.TabIndex = 1;
+            // 
+            // txtDot1
+            // 
+            this.txtDot1.Location = new System.Drawing.Point(7, 30);
+            this.txtDot1.Name = "txtDot1";
+            this.txtDot1.Size = new System.Drawing.Size(232, 21);
+            this.txtDot1.TabIndex = 0;
             // 
             // button10
             // 
@@ -502,12 +519,180 @@
             this.button10.UseVisualStyleBackColor = false;
             this.button10.Click += new System.EventHandler(this.Button10_Click_1);
             // 
+            // chad
+            // 
+            this.chad.BackColor = System.Drawing.Color.Transparent;
+            chartArea1.Name = "ChartArea1";
+            this.chad.ChartAreas.Add(chartArea1);
+            legend1.Enabled = false;
+            legend1.Name = "Legend1";
+            this.chad.Legends.Add(legend1);
+            this.chad.Location = new System.Drawing.Point(12, 362);
+            this.chad.Name = "chad";
+            series1.BorderWidth = 3;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Color = System.Drawing.Color.Red;
+            series1.Legend = "Legend1";
+            series1.MarkerBorderWidth = 5;
+            series1.Name = "График расстояний между точками";
+            series1.YValuesPerPoint = 10;
+            this.chad.Series.Add(series1);
+            this.chad.Size = new System.Drawing.Size(502, 226);
+            this.chad.TabIndex = 51;
+            this.chad.Text = "chad";
+            // 
+            // ribs
+            // 
+            this.ribs.Appearance = System.Windows.Forms.Appearance.Button;
+            this.ribs.AutoSize = true;
+            this.ribs.BackColor = System.Drawing.Color.RosyBrown;
+            this.ribs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ribs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ribs.Location = new System.Drawing.Point(510, 362);
+            this.ribs.Name = "ribs";
+            this.ribs.Size = new System.Drawing.Size(58, 25);
+            this.ribs.TabIndex = 52;
+            this.ribs.Text = "Рёбра";
+            this.ribs.UseVisualStyleBackColor = false;
+            this.ribs.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
+            // 
+            // button11
+            // 
+            this.button11.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button11.Location = new System.Drawing.Point(574, 362);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(159, 25);
+            this.button11.TabIndex = 53;
+            this.button11.Text = "Построить дерево";
+            this.button11.UseVisualStyleBackColor = false;
+            this.button11.Click += new System.EventHandler(this.Button11_Click_1);
+            // 
+            // graph_method
+            // 
+            this.graph_method.BackColor = System.Drawing.Color.Black;
+            this.graph_method.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.graph_method.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.graph_method.ForeColor = System.Drawing.Color.White;
+            this.graph_method.FormattingEnabled = true;
+            this.graph_method.Items.AddRange(new object[] {
+            "Выделение связных компонент",
+            "Мин. остовное дерево (алгоритм Прима)"});
+            this.graph_method.Location = new System.Drawing.Point(510, 404);
+            this.graph_method.Name = "graph_method";
+            this.graph_method.Size = new System.Drawing.Size(275, 23);
+            this.graph_method.TabIndex = 54;
+            this.graph_method.Text = "Графовый метод кластеризации";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Location = new System.Drawing.Point(513, 439);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(72, 13);
+            this.label5.TabIndex = 56;
+            this.label5.Text = "Параметр R:";
+            // 
+            // Rbox
+            // 
+            this.Rbox.Location = new System.Drawing.Point(591, 436);
+            this.Rbox.Name = "Rbox";
+            this.Rbox.Size = new System.Drawing.Size(108, 20);
+            this.Rbox.TabIndex = 55;
+            // 
+            // button12
+            // 
+            this.button12.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button12.Location = new System.Drawing.Point(510, 468);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(233, 25);
+            this.button12.TabIndex = 57;
+            this.button12.Text = "Графовая кластеризация";
+            this.button12.UseVisualStyleBackColor = false;
+            this.button12.Click += new System.EventHandler(this.Button12_Click_1);
+            // 
+            // r_auto
+            // 
+            this.r_auto.AutoSize = true;
+            this.r_auto.BackColor = System.Drawing.Color.Transparent;
+            this.r_auto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.r_auto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.r_auto.Location = new System.Drawing.Point(714, 437);
+            this.r_auto.Name = "r_auto";
+            this.r_auto.Size = new System.Drawing.Size(55, 19);
+            this.r_auto.TabIndex = 58;
+            this.r_auto.Text = "авто";
+            this.r_auto.UseVisualStyleBackColor = false;
+            this.r_auto.CheckedChanged += new System.EventHandler(this.R_auto_CheckedChanged);
+            // 
+            // button14
+            // 
+            this.button14.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button14.Location = new System.Drawing.Point(510, 508);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(159, 25);
+            this.button14.TabIndex = 59;
+            this.button14.Text = "Обновить график";
+            this.button14.UseVisualStyleBackColor = false;
+            this.button14.Click += new System.EventHandler(this.Button14_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.Location = new System.Drawing.Point(513, 542);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(41, 13);
+            this.label6.TabIndex = 61;
+            this.label6.Text = "Шаг R:";
+            // 
+            // Cstep
+            // 
+            this.Cstep.Location = new System.Drawing.Point(557, 539);
+            this.Cstep.Name = "Cstep";
+            this.Cstep.Size = new System.Drawing.Size(49, 20);
+            this.Cstep.TabIndex = 60;
+            // 
+            // chart_auto
+            // 
+            this.chart_auto.AutoSize = true;
+            this.chart_auto.BackColor = System.Drawing.Color.Transparent;
+            this.chart_auto.Checked = true;
+            this.chart_auto.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chart_auto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chart_auto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chart_auto.Location = new System.Drawing.Point(714, 514);
+            this.chart_auto.Name = "chart_auto";
+            this.chart_auto.Size = new System.Drawing.Size(55, 19);
+            this.chart_auto.TabIndex = 62;
+            this.chart_auto.Text = "авто";
+            this.chart_auto.UseVisualStyleBackColor = false;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(803, 353);
+            this.ClientSize = new System.Drawing.Size(803, 600);
+            this.Controls.Add(this.chart_auto);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.Cstep);
+            this.Controls.Add(this.button14);
+            this.Controls.Add(this.r_auto);
+            this.Controls.Add(this.button12);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.Rbox);
+            this.Controls.Add(this.graph_method);
+            this.Controls.Add(this.button11);
+            this.Controls.Add(this.ribs);
+            this.Controls.Add(this.chad);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Kls_Metrics);
@@ -548,6 +733,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chad)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -589,6 +775,18 @@
         private System.Windows.Forms.TextBox txtDot2;
         private System.Windows.Forms.TextBox txtDot1;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chad;
+        private System.Windows.Forms.CheckBox ribs;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.ComboBox graph_method;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox Rbox;
+        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.CheckBox r_auto;
+        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox Cstep;
+        private System.Windows.Forms.CheckBox chart_auto;
     }
 }
 

@@ -20,6 +20,9 @@ namespace Knn_class
         static List<Klass> gls = new List<Klass>();
         Dot.Metric metric = new Dot.Evklid();
         Klass.Metric kls_metric = new Klass.Nearest();
+        static List<Rebro> bros = new List<Rebro>();
+        List<double> chart_step = new List<double>();
+        List<double> step_count = new List<double>();
 
         public Main()
         {
@@ -34,6 +37,9 @@ namespace Knn_class
             pictureBox1.Image = new Bitmap(pictureBox1.Height, pictureBox1.Width);            
             classes.DataSource = gls;
             dots_list.DataSource = Dots;
+
+            chart_step.AddRange(new double[] { 0, 50, 100, 150, 200, 250, 300 }.ToList());
+            Fill_chart();
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -142,21 +148,9 @@ namespace Knn_class
             Dots.Clear();
             Dots.AddRange(Klass.Kls_to_List(gls));
             Klass.RefreshAll(gls);
-
-            //foreach (Klass g in gls)
-            //{
-            //    g.RemoveAll();
-            //    foreach (Dot d in Dots)
-            //    {
-            //        if (d.class_name == g.name)
-            //        {
-            //            g.Add(d);
-            //            if (d.clr_name != g.clr_name)
-            //                d.clr_name = g.clr_name;
-            //        }                        
-            //    }
-            //}
-
+            if(chart_auto.Checked)
+                Fill_chart();
+            
             RefreshScreen();
             dots_list.DataSource = null;
             dots_list.Items.Clear();
@@ -176,6 +170,21 @@ namespace Knn_class
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 g.Clear(Color.Black);
                 //foreach(Dot d in Dots)
+                if (ribs.Checked)
+                {
+                    foreach(Rebro bro in bros)
+                    {
+                        try
+                        {
+                            g.DrawLine(new Pen(Color.Red, 2),
+                                        (float)bro.from.prms[0],
+                                        (float)bro.from.prms[1],
+                                        (float)bro.to.prms[0],
+                                        (float)bro.to.prms[1]);
+                        }
+                        catch { }
+                    }
+                }
                 foreach (Dot d in Klass.Kls_to_List(gls))
                 {
                     SolidBrush b = new SolidBrush(Color.FromName(d.clr_name));
@@ -269,6 +278,7 @@ namespace Knn_class
         private void Button6_Click(object sender, EventArgs e)
         {            
             Dots.Clear();
+            bros.Clear();
             class_centers.Clear();
             foreach (Klass g in gls)
             {
@@ -309,6 +319,10 @@ namespace Knn_class
         }
         private void Centers_CheckedChanged(object sender, EventArgs e)
         {
+            if (centers.Checked)
+                centers.BackColor = Color.LightGreen;
+            else
+                centers.BackColor = Color.RosyBrown;
             get_centers();
             RefreshScreen();
         }
@@ -550,6 +564,174 @@ namespace Knn_class
             {
                 MessageBox.Show("Строки должны иметь одинаковую длину.", "Ошибка!");
             }
+        }
+
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ribs.Checked)
+                ribs.BackColor = Color.LightGreen;
+            else
+                ribs.BackColor = Color.RosyBrown;
+            RefreshScreen();
+        }
+
+        private void Button11_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                Dots.Clear();
+                Dots.AddRange(Klass.Kls_to_List(gls));
+                if (graph_method.SelectedItem.ToString() == "Мин. остовное дерево (алгоритм Прима)")
+                    Rebro.Prim(Dots, bros, metric);
+                if (graph_method.SelectedItem.ToString() == "Выделение связных компонент")
+                    Rebro.Build_from_R(Dots, bros, metric, Convert.ToInt32(Rbox.Text));
+
+                RefreshScreen();
+            }
+            catch { }
+            
+        }
+
+        private void R_auto_CheckedChanged(object sender, EventArgs e)
+        {
+            if (r_auto.Checked)
+            {
+                Rbox.Text = Find_R().ToString();
+            }
+            else
+            {
+
+            }
+        }
+
+        private void Button12_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                Klass.CopyDots(Klass.Kls_to_List(gls), old_Dots);
+                Fill_clr(clr);
+                Random rnd = new Random();
+                List<Dot> centers = new List<Dot>();
+                Klass none = gls[0];
+                foreach (Klass k in gls)
+                {
+                    if (k.name != "none")
+                    {
+                        Klass.AppendDots(k, gls[0]);
+                    }
+                }
+                gls.Clear();
+                gls.Add(none);
+                Dots.Clear();
+                Dots.AddRange(Klass.Kls_to_List(gls));
+
+                if (graph_method.SelectedItem.ToString() == "Мин. остовное дерево (алгоритм Прима)")
+                    Rebro.Prim(Dots, bros, metric, Convert.ToInt32(klasters.Text));
+                if (graph_method.SelectedItem.ToString() == "Выделение связных компонент")
+                    Rebro.Build_from_R(Dots, bros, metric, Convert.ToInt32(Rbox.Text));
+
+                Klass.lab4(gls, bros);
+                foreach (Klass k in gls)
+                {
+                    if (k.name != "none")
+                    {
+                        k.clr_name = clr[rnd.Next(0, clr.Count - 1)];
+                        clr.Remove(k.clr_name);
+                    }
+                }
+                RefreshScreen();
+                RefreshAll();
+            }
+            catch { }
+        }
+
+        private void Point_draw_CheckedChanged(object sender, EventArgs e)
+        {
+            if (point_draw.Checked)
+                point_draw.BackColor = Color.LightGreen;
+            else
+                point_draw.BackColor = Color.RosyBrown;
+        }
+
+        private void Button14_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(Cstep.Text))
+            {
+                double step = 50;
+                if(Double.TryParse(Cstep.Text, out step))
+                {
+                    chart_step.Clear();
+                    double point = 0;
+                    while (point <= 300)
+                    {
+                        if (point > 300)
+                        {
+                            chart_step.Add(300);
+                            break;
+                        }
+                        chart_step.Add(point);
+                        point += step;
+                    }
+                }
+            }
+            Fill_chart();
+        }
+        private void Fill_chart()
+        {
+            chad.Series[0].Points.Clear();
+            Dots.Clear();
+            Dots.AddRange(Klass.Kls_to_List(gls));
+            step_count.Clear();
+            List<Rebro> tempbros = new List<Rebro>();
+            Rebro.Build_full(Dots, tempbros, metric);
+            for(int i = 0; i < chart_step.Count; i++)
+            {
+                double from, to;
+                if (i == 0)
+                    from = 0;
+                else
+                    from = chart_step[i - 1];
+                to = chart_step[i];
+                int count = 0;
+                foreach (Rebro bro in tempbros)
+                {
+                    if (bro.mean > from && bro.mean <= to)
+                        count++;
+                }
+                step_count.Add(count);
+                chad.Series[0].Points.AddXY(to, count);
+            }
+            tempbros.Clear();
+            if (r_auto.Checked)
+                Rbox.Text = Find_R().ToString();
+        }
+        private double Find_R()
+        {
+            List<double> counts = new List<double>();
+            counts.AddRange(step_count.ToList());
+            int max1, max2, min_index;
+            double min;
+            max1 = step_count.IndexOf(counts.Max());
+            counts.Remove(counts.Max());
+            max2 = step_count.IndexOf(counts.Max());
+            counts.Clear();
+            if (max1 > max2)
+            {
+                int temp = max1;
+                max1 = max2;
+                max2 = temp;
+            }
+            min = step_count[max1];
+            min_index = max1;
+            for(int i = max1; i < max2; i++)
+            {
+                if (step_count[i] < min)
+                {
+                    min = step_count[i];
+                    min_index = i;
+                } 
+            }
+            return chart_step[min_index];
         }
     }
 }
