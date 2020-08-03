@@ -13,7 +13,6 @@ namespace Knn_class
     
     public partial class Main : Form
     {
-        Point lastPoint = Point.Empty;
         public static List<string> clr = new List<string>();
         List<Dot> Dots = new List<Dot>();
         List<Dot> old_Dots = new List<Dot>();
@@ -59,7 +58,17 @@ namespace Knn_class
             Glass temp = new Glass(name, col_name);
             gls.Add(temp);
             clr.Remove(col_name);
-        }        
+        } 
+        public void generate_class(int count=1)
+        {
+            Random rnd = new Random();
+            for (int i = 0; i < count; i++)
+            {
+                string name = "Класс " + gls.Count;                
+                string color = clr[rnd.Next(0, clr.Count - 1)];
+                add_class(name, color);
+            }            
+        }
         private void classes_DrawItem(object sender, DrawItemEventArgs e)
         {
             ComboBox combo;
@@ -104,15 +113,6 @@ namespace Knn_class
             {
                 MouseEventArgs me = (MouseEventArgs)e;
                 Point coordinates = me.Location;
-
-                //Image i = pictureBox1.Image;
-                //using (Graphics g = Graphics.FromImage(i))
-                //{
-                //    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                //    SolidBrush b = new SolidBrush(Color.FromName(gls[classes.SelectedIndex].clr_name));
-                //    g.FillEllipse(b, new Rectangle(coordinates.X, coordinates.Y, 8, 8));
-                //}
-                //pictureBox1.Refresh();
                 List<double> tmp_list = new List<double>();
                 tmp_list.Add(coordinates.X);
                 tmp_list.Add(coordinates.Y);
@@ -122,15 +122,27 @@ namespace Knn_class
                 temp.clr_name = gls[classes.SelectedIndex].clr_name;
                 gls[classes.SelectedIndex].Add(temp);
 
-                //dots_list.DataSource = null;
-                //dots_list.Items.Clear();
-                //dots_list.DataSource = Dots;
                 get_centers();
                 RefreshAll();
             }           
         }
         private void RefreshAll()
         {
+            foreach (Glass g in gls)
+            {
+                g.RemoveAll();
+                foreach (Dot d in Dots)
+                {
+                    if (d.class_name == g.name)
+                    {
+                        g.Add(d);
+                        if (d.clr_name != g.clr_name)
+                            d.clr_name = g.clr_name;
+                    }
+                        
+                }
+            }
+
             RefreshScreen();
             dots_list.DataSource = null;
             dots_list.Items.Clear();
@@ -190,13 +202,20 @@ namespace Knn_class
         }
         private void Button2_Click_1(object sender, EventArgs e)
         {
-            foreach (Dot d in Dots)
-                d.mean = d.Evklid(Dots[dots_list.SelectedIndex]);
-            
-            Dots = Dots.OrderBy(d => d.class_name == "none").ThenBy(d => d.mean).ToList();
-            dots_list.DataSource = null;
-            dots_list.Items.Clear();
-            dots_list.DataSource = Dots;
+            try
+            {
+                foreach (Dot d in Dots)
+                    d.mean = d.Evklid(Dots[dots_list.SelectedIndex]);
+
+                Dots = Dots.OrderBy(d => d.class_name == "none").ThenBy(d => d.mean).ToList();
+
+
+
+                dots_list.DataSource = null;
+                dots_list.Items.Clear();
+                dots_list.DataSource = Dots;
+            }
+            catch { }            
         }
         private void Button3_Click(object sender, EventArgs e)
         {
@@ -205,20 +224,13 @@ namespace Knn_class
             int k=0;
             if (int.TryParse(neighbours.Text, out k)|| c_knn.Checked||cw_knn.Checked)
             {
+                foreach (Dot d in Dots)
+                    d.expectation = 0;
                 if (def_knn.Checked) Dot.knn(Dots, k);
                 else if (w_knn.Checked) Dot.knn(Dots, k, 1.0);
                 else if (c_knn.Checked) Dot.knn(Dots, gls);
                 else if (cw_knn.Checked) Dot.knn(Dots, gls, 1.0);
-                    
-                foreach (Glass g in gls)
-                {
-                    g.RemoveAll();
-                    foreach (Dot d in Dots)
-                    {
-                        if (d.class_name == g.name)
-                            g.Add(d);
-                    }
-                }
+                 
                 RefreshAll();
             }
         }
@@ -227,6 +239,8 @@ namespace Knn_class
             logBox.Clear();
             foreach (Dot d in Dots)
                 AppendText(logBox, d.ToString(), Color.FromName(d.clr_name));
+            string avg_prediction = "Средняя точность результатов классификации: "+Dot.average_predict(Dots)*100+"%";
+            AppendText(logBox, avg_prediction, Color.FromName("White"));
         }
         public static void AppendText(RichTextBox box, string text, Color color)
         {
@@ -285,5 +299,83 @@ namespace Knn_class
             get_centers();
             RefreshScreen();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            CopyDots(Dots, old_Dots);
+            Dot.Generate(Dots, 2, (int)numKlasters.Value, (int)numElements.Value, 300, gls[classes.SelectedIndex].name);
+            
+            RefreshAll();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CopyDots(Dots, old_Dots);
+
+                Fill_clr(clr);
+
+                List<Dot> centers = new List<Dot>();
+
+                Glass none = gls[0];
+                gls.Clear();
+                gls.Add(none);
+
+                generate_class(Convert.ToInt32(klasters.Text));
+
+                Dot.Generate(centers, 2, gls.Count - 1, 1, 300, "none", 0);
+                for (int i = 0; i < gls.Count - 1; i++)
+                {
+                    centers[i].class_name = gls[i + 1].name;
+                    centers[i].clr_name = gls[i + 1].clr_name;
+                }
+
+                Dot.kmeans(Dots, centers);
+                class_centers.Clear();
+                class_centers.AddRange(centers);
+                RefreshAll();
+
+            }
+            catch { }            
+        }
+        private void button9_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CopyDots(Dots, old_Dots);
+                
+                Fill_clr(clr);
+
+                List<Dot> centers = new List<Dot>();
+
+                if (gls.Count()-1== Convert.ToInt32(klasters.Text)&&gls[0].Count()==0)
+                {
+                    centers.AddRange(class_centers);
+                }
+                else
+                {
+                    Glass none = gls[0];
+                    gls.Clear();
+                    gls.Add(none);
+
+                    generate_class(Convert.ToInt32(klasters.Text));
+                    
+                    Dot.Generate(centers, 2, gls.Count - 1, 1, 300, "none", 0);
+                    for (int i = 0; i < gls.Count - 1; i++)
+                    {
+                        centers[i].class_name = gls[i + 1].name;
+                        centers[i].clr_name = gls[i + 1].clr_name;
+                    }
+                }
+                
+                Dot.kmeans_debug(Dots, centers);
+                class_centers.Clear();
+                class_centers.AddRange(centers);
+                RefreshAll();
+            }
+            catch { }
+        }
+
     }
 }
